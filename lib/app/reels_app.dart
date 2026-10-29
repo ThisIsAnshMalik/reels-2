@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:reels_testing/core/app_theme.dart';
-import 'package:reels_testing/screens/short_player_screen.dart';
+import 'package:reels_testing/screens/reels_screen.dart';
 
-class ShortsApp extends StatelessWidget {
-  const ShortsApp({super.key});
+class ReelsApp extends StatelessWidget {
+  const ReelsApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'YouTube Short',
+      title: 'Reels',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.dark,
-      home: const ShortPlayerScreen(),
+      home: const ReelsScreen(),
     );
   }
 }

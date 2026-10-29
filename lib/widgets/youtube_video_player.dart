@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:reels_testing/core/constants.dart';
+import 'package:reels_testing/core/youtube_player_config.dart';
+import 'package:reels_testing/widgets/video_frame.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-class ShortVideoPlayer extends StatefulWidget {
-  const ShortVideoPlayer({
+class YoutubeVideoPlayer extends StatefulWidget {
+  const YoutubeVideoPlayer({
     super.key,
     required this.videoId,
     required this.isActive,
@@ -14,10 +16,10 @@ class ShortVideoPlayer extends StatefulWidget {
   final bool isActive;
 
   @override
-  State<ShortVideoPlayer> createState() => _ShortVideoPlayerState();
+  State<YoutubeVideoPlayer> createState() => _YoutubeVideoPlayerState();
 }
 
-class _ShortVideoPlayerState extends State<ShortVideoPlayer> {
+class _YoutubeVideoPlayerState extends State<YoutubeVideoPlayer> {
   late final YoutubePlayerController _controller;
 
   @override
@@ -25,19 +27,15 @@ class _ShortVideoPlayerState extends State<ShortVideoPlayer> {
     super.initState();
     _controller = YoutubePlayerController(
       initialVideoId: widget.videoId,
-      flags: YoutubePlayerFlags(
-        autoPlay: widget.isActive,
-        mute: false,
-        loop: true,
-        controlsVisibleAtStart: true,
-        hideControls: false,
-        enableCaption: false,
-      ),
+      flags: YoutubePlayerConfig.flags,
     );
+    if (widget.isActive) {
+      _controller.play();
+    }
   }
 
   @override
-  void didUpdateWidget(ShortVideoPlayer oldWidget) {
+  void didUpdateWidget(YoutubeVideoPlayer oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.isActive && !oldWidget.isActive) {
       _controller.play();
@@ -52,6 +50,17 @@ class _ShortVideoPlayerState extends State<ShortVideoPlayer> {
     super.dispose();
   }
 
+  void _togglePlayback() {
+    final playing = _controller.value.isPlaying;
+    playing ? _controller.pause() : _controller.play();
+  }
+
+  void _playIfActive() {
+    if (widget.isActive && !_controller.value.isPlaying) {
+      _controller.play();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return YoutubePlayerBuilder(
@@ -60,15 +69,17 @@ class _ShortVideoPlayerState extends State<ShortVideoPlayer> {
       },
       player: YoutubePlayer(
         controller: _controller,
-        aspectRatio: AppConstants.shortAspectRatio,
-        showVideoProgressIndicator: true,
-        progressIndicatorColor: Colors.red,
-        progressColors: const ProgressBarColors(
-          playedColor: Colors.red,
-          handleColor: Colors.redAccent,
-        ),
+        aspectRatio: AppConstants.videoAspectRatio,
+        showVideoProgressIndicator: false,
+        onReady: _playIfActive,
       ),
-      builder: (context, player) => player,
+      builder: (context, player) {
+        return VideoFrame(
+          aspectRatio: AppConstants.videoAspectRatio,
+          onTap: _togglePlayback,
+          child: player,
+        );
+      },
     );
   }
 }

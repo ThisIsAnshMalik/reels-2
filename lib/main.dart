@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:reels_testing/app/shorts_app.dart';
+import 'package:reels_testing/app/reels_app.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -9,5 +9,5 @@ void main() {
     DeviceOrientation.portraitDown,
   ]);
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-  runApp(const ShortsApp());
+  runApp(const ReelsApp());
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class FakeBottomNavBar extends StatelessWidget {
-  const FakeBottomNavBar({
+class FeedBottomNav extends StatelessWidget {
+  const FeedBottomNav({
     super.key,
     required this.selectedIndex,
     required this.onTap,
@@ -12,39 +12,26 @@ class FakeBottomNavBar extends StatelessWidget {
 
   static const _items = [
     (icon: Icons.home_outlined, selectedIcon: Icons.home, label: 'Home'),
-    (
-      icon: Icons.play_circle_outline,
-      selectedIcon: Icons.play_circle,
-      label: 'Shorts',
-    ),
-    (
-      icon: Icons.subscriptions_outlined,
-      selectedIcon: Icons.subscriptions,
-      label: 'Subscriptions',
-    ),
-    (
-      icon: Icons.video_library_outlined,
-      selectedIcon: Icons.video_library,
-      label: 'Library',
-    ),
+    (icon: Icons.play_circle_outline, selectedIcon: Icons.play_circle, label: 'Shorts'),
+    (icon: Icons.subscriptions_outlined, selectedIcon: Icons.subscriptions, label: 'Subscriptions'),
+    (icon: Icons.video_library_outlined, selectedIcon: Icons.video_library, label: 'Library'),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.black,
-        border: Border(top: BorderSide(color: Color(0xFF2A2A2A))),
-      ),
-      child: SafeArea(
-        top: false,
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.only(bottom: 8),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 6),
         child: SizedBox(
-          height: 56,
+          height: 52,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: List.generate(_items.length, (index) {
               final item = _items[index];
               final selected = index == selectedIndex;
+              final color = selected ? Colors.white : Colors.white70;
               return InkWell(
                 onTap: () => onTap(index),
                 child: SizedBox(
@@ -52,19 +39,14 @@ class FakeBottomNavBar extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        selected ? item.selectedIcon : item.icon,
-                        color: selected ? Colors.white : Colors.grey,
-                        size: 26,
-                      ),
+                      Icon(selected ? item.selectedIcon : item.icon, color: color, size: 26),
                       const SizedBox(height: 4),
                       Text(
                         item.label,
                         style: TextStyle(
                           fontSize: 10,
-                          color: selected ? Colors.white : Colors.grey,
-                          fontWeight:
-                              selected ? FontWeight.w600 : FontWeight.normal,
+                          color: color,
+                          fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
                         ),
                       ),
                     ],
